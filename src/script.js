@@ -34,23 +34,23 @@ const gravity = 0.1;
 
 function drawBird() {
   const birdImg = new Image();
-  birdImg.src = "../img/flappy.png";
+  birdImg.src = "img/flappy.png";
   ctx.drawImage(birdImg, birdX, birdY, birdSize, birdSize);
 }
 
 function drawPipe() {
   const pipeImgBot = new Image();
-  pipeImgBot.src = "../img/bot.png";
+  pipeImgBot.src = "img/bot.png";
   ctx.drawImage(pipeImgBot, pipeX, 0, pipeWidth, pipeHeight);
   
   const pipeImgTop = new Image();
-  pipeImgTop.src = "../img/top.png";
+  pipeImgTop.src = "img/top.png";
   ctx.drawImage(pipeImgTop, pipeX, pipeHeight + pipeGap, pipeWidth, canvasHeight - pipeHeight - pipeGap);
 }
 
 function drawCoin() {
   const coinImg = new Image();
-  coinImg.src = "../img/coin.png";
+  coinImg.src = "img/coin.png";
   ctx.drawImage(coinImg, coinX, coinY, coinSize, coinSize); 
 }
 
