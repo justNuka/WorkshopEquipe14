@@ -1,12 +1,15 @@
 body {
     margin: 0;
     padding: 0;
-    background: #6fc3df;
+    background: black;
 }
   
   canvas {
     display: block;
     margin: 0 auto;
     border: 2px solid #000;
-    
+    background: url(../img/bg-in-game.png) no-repeat;
+    background-size: cover;
+    width: 480px;
+    height: 580px;
 }  

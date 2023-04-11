@@ -9,7 +9,7 @@ canvas.height = canvasHeight;
 var birdX = canvasWidth / 4;
 var birdY = canvasHeight / 2;
 var birdDY = 0;
-const birdSize = 20;
+const birdSize = 60;
 
 var pipeX = canvasWidth;
 var pipeGap = 200;
@@ -17,6 +17,11 @@ var pipeDY = -1.5;
 const pipeWidth = 50;
 var pipeHeight = canvasHeight - pipeGap - 50;
 var pipePassed = false;
+
+var playerCoins = 0;
+var coinX = canvasWidth;
+var coinY = (canvasHeight - pipeGap);
+const coinSize = 40;
 
 var score = 0;
 
@@ -28,23 +33,25 @@ var isGameOver = false;
 const gravity = 0.1;
 
 function drawBird() {
-  ctx.beginPath();
-  ctx.fillStyle = "yellow";
-  ctx.arc(birdX, birdY, birdSize, 0, 2 * Math.PI);
-  ctx.fill();
+  const birdImg = new Image();
+  birdImg.src = "../img/flappy.png";
+  ctx.drawImage(birdImg, birdX, birdY, birdSize, birdSize);
 }
 
 function drawPipe() {
-  ctx.fillStyle = "green";
-  ctx.fillRect(pipeX, 0, pipeWidth, pipeHeight);
-  ctx.fillRect(pipeX, pipeHeight + pipeGap, pipeWidth, canvasHeight - pipeHeight - pipeGap);
+  const pipeImgBot = new Image();
+  pipeImgBot.src = "../img/bot.png";
+  ctx.drawImage(pipeImgBot, pipeX, 0, pipeWidth, pipeHeight);
+  
+  const pipeImgTop = new Image();
+  pipeImgTop.src = "../img/top.png";
+  ctx.drawImage(pipeImgTop, pipeX, pipeHeight + pipeGap, pipeWidth, canvasHeight - pipeHeight - pipeGap);
 }
 
 function drawCoin() {
-  ctx.beginPath();
-  ctx.fillStyle = "gold";
-  ctx.arc(coinX, coinY, coinSize, 0, 2 * Math.PI);
-  ctx.fill();
+  const coinImg = new Image();
+  coinImg.src = "../img/coin.png";
+  ctx.drawImage(coinImg, coinX, coinY, coinSize, coinSize); 
 }
 
 function drawScore() {
@@ -67,10 +74,6 @@ function updatePipe() {
     pipeHeight = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
     pipePassed = false;
     coinPassed = false;
-
-    // Generate a new coin
-    coinX = pipeX + pipeWidth / 2 - coinSize / 2;
-    coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
   }
 
   if (pipeX === birdX - pipeWidth / 2) {
@@ -81,17 +84,12 @@ function updatePipe() {
   // Check collision with pipes
   if (
     birdX + birdSize > pipeX &&
-    birdX - birdSize < pipeX + pipeWidth &&
-    (birdY - birdSize < pipeHeight || birdY + birdSize > pipeHeight + pipeGap)
+    birdX < pipeX + pipeWidth &&
+    (birdY < pipeHeight || birdY + birdSize > pipeHeight + pipeGap)
   ) {
     gameOver();
   }
 }
-
-var playerCoins = 0;
-var coinX = canvasWidth;
-var coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
-const coinSize = 10;
 
   function updateCoin() {
     coinX -= 1;
@@ -107,10 +105,17 @@ const coinSize = 10;
       coinX = -coinSize;
     }
 
-    // Generate a new coin
-    if (coinX < -coinSize) {
+    // Générer une nouvelle piece
+    if(coinX < -coinSize) {
       coinX = canvasWidth;
       coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
+      while(
+          coinX + coinSize > pipeX &&
+          coinX - coinSize < pipeX + pipeWidth &&
+          (coinY - coinSize < pipeHeight || coinY + coinSize > pipeHeight + pipeGap)) {
+            coinX = canvasWidth;
+            coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
+      }
     }
   }
 
@@ -119,6 +124,7 @@ function draw() {
 
   updateBird();
   updatePipe();
+  updateCoin();
 
   drawPipe();
   drawBird();
