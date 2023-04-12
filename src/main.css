@@ -1,5 +1,5 @@
 body {
-    background-image: url('img/bg-in-game.png');
+    background-image: linear-gradient(to bottom, rgba(255,255,255,0), rgb(194, 170, 170)), url('img/bg-in-game.png');
     background-size: cover;
     background-position: center center;
     position: relative;
@@ -32,4 +32,10 @@ button {
   .input1 {
     width: 200px;
     height: 30px;
+  }
+
+  .descriptif {
+    text-align: center;
+    color:  aliceblue;
+    font-size: 30px;
   }
