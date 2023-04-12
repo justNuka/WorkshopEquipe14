@@ -221,6 +221,28 @@ function gameOver() {
   sound_background.pause();
   sound_die.play();
   sound_jump.volume = 0;
+
+  // Enregistrement du joueur et de son score
+  const username = sessionStorage.getItem("username");
+  // Données à ajouter au fichier JSON
+  const newScore = {
+    pseudo: username,
+    score: score,
+  };
+
+  // Envoi d'une requête AJAX POST à l'end point /leaderboard pour ajouter les nouvelles données
+  $.ajax({
+    type: "POST",
+    url: "https://temp3.leod1.site/leaderboard",
+    contentType: "application/json",
+    data: JSON.stringify(newScore),
+    success: function() {
+      console.log("Données ajoutées avec succès !");
+    },
+    error: function() {
+      console.log("Une erreur s'est produite lors de l'ajout des données");
+    }
+  });
 }
 
 function restartGame() {

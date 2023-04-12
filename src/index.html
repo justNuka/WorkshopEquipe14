@@ -4,26 +4,35 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acueil Flappy Boss</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Accueil Flappy Boss</title>
 </head>
 <body>
-    <a href="game.html"></a>
     <div class="buttons">
         <a href="classement.html"><button>Classement</button></a>
     </div>
 
-    <script src="script.js"></script>
-
-    <canvas id="canvas"></canvas>
-
     <div class="formGame">
         <div id="form-container">
             <form id="form">
-              <label for="username">Enter your username:</label>
+              <label for="username">Entrez votre pseudo:</label>
               <input type="text" id="username" name="username">
-              <a href="game.html"><button type="submit">Start game</button></a>
+              <button type="submit">Start game</button>
             </form>
           </div>
     </div>
+
+    <script src="script.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#form").submit(function(event) {
+                event.preventDefault();
+                const username = $("#username").val();
+                sessionStorage.setItem("username", username);
+                window.location.href = "game.html";
+                console.log(username);
+            });
+        });
+    </script>
 </body>
 </html>
