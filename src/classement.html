@@ -98,6 +98,54 @@
 </head>
 
 <body>
+    <!--
+        <?php
+    // Connexion à la base de données
+    $conn = mysqli_connect("localhost", "user", "password", "database");
+
+    // Récupération des 5 meilleurs scores
+    $query = "SELECT * FROM scores ORDER BY score DESC LIMIT 5";
+    $result = mysqli_query($conn, $query);
+
+    // Affichage des scores
+    $rank = 1;
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<li class='score-item'>";
+        echo "<span class='score-rank'>$rank</span>";
+        echo "<span class='score-name'>" . htmlspecialchars($row['player_name']) . "</span>";
+        echo "<span class='score-value'>" . htmlspecialchars($row['score']) . "</span>";
+        echo "</li>";
+        $rank++;
+    }
+?>
+
+
+<div class="leaderboard">
+    <h2>Classement</h2>
+    <ul>
+        <?php
+            // Affichage des scores
+            $rank = 1;
+            while ($row = mysqli_fetch_assoc($result)) {
+                $class = "score-item";
+                if ($rank == 1) {
+                    $class .= " top1";
+                } else if ($rank == 2) {
+                    $class .= " top2";
+                } else if ($rank == 3) {
+                    $class .= " top3";
+                }
+                echo "<li class='$class'>";
+                echo "<span class='score-rank'>$rank</span>";
+                echo "<span class='score-name'>" . htmlspecialchars($row['player_name']) . "</span>";
+                echo "<span class='score-value'>" . htmlspecialchars($row['score']) . "</span>";
+                echo "<span class='score-icon'><i class='fas fa-trophy'></i></span>";
+                echo "</li>";
+                $rank++;
+            }
+        ?>
+    </ul>
+    -->
     <div class="leaderboard-container">
         <h2 style="color: aliceblue;">Classement</h2>
         <div class="score-card gold">
