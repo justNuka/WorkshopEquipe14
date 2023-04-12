@@ -9,7 +9,7 @@ canvas.height = canvasHeight;
 var birdX = canvasWidth / 4;
 var birdY = canvasHeight / 2;
 var birdDY = 0;
-const birdSize = 60;
+const birdSize = 40;
 
 var pipeX = canvasWidth;
 var pipeGap = 200;
@@ -29,8 +29,12 @@ var intervalID;
 
 var isGameOver = false;
 
-
 const gravity = 0.1;
+
+const sound_background = new Audio("sounds/bgsound-30min.mp3");
+const sound_jump = new Audio("sounds/jump.ogg");
+const sound_die = new Audio("sounds/loose-sound.mp3");
+sound_background.play();
 
 function drawBird() {
   const birdImg = new Image();
@@ -40,11 +44,11 @@ function drawBird() {
 
 function drawPipe() {
   const pipeImgBot = new Image();
-  pipeImgBot.src = "img/bot.png";
+  pipeImgBot.src = "img/top.png";
   ctx.drawImage(pipeImgBot, pipeX, 0, pipeWidth, pipeHeight);
   
   const pipeImgTop = new Image();
-  pipeImgTop.src = "img/top.png";
+  pipeImgTop.src = "img/bot.png";
   ctx.drawImage(pipeImgTop, pipeX, pipeHeight + pipeGap, pipeWidth, canvasHeight - pipeHeight - pipeGap);
 }
 
@@ -83,41 +87,41 @@ function updatePipe() {
 
   // Check collision with pipes
   if (
-    birdX + birdSize > pipeX &&
+    birdX + birdSize > pipeX && 
     birdX < pipeX + pipeWidth &&
     (birdY < pipeHeight || birdY + birdSize > pipeHeight + pipeGap)
-  ) {
+    ){
     gameOver();
   }
 }
 
-  function updateCoin() {
-    coinX -= 1;
+function updateCoin() {
+  coinX -= 1;
 
-    // Check collision with bird
-    if (
-      birdX + birdSize > coinX &&
-      birdX - birdSize < coinX + coinSize &&
-      birdY + birdSize > coinY &&
-      birdY - birdSize < coinY + coinSize
-    ) {
-      playerCoins++;
-      coinX = -coinSize;
-    }
+  // Check collision with bird
+  if (
+    birdX + birdSize > coinX &&
+    birdX - birdSize < coinX + coinSize &&
+    birdY + birdSize > coinY &&
+    birdY - birdSize < coinY + coinSize
+  ) {
+    playerCoins++;
+    coinX = -coinSize;
+  }
 
-    // Générer une nouvelle piece
-    if(coinX < -coinSize) {
-      coinX = canvasWidth;
-      coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
-      while(
-          coinX + coinSize > pipeX &&
-          coinX - coinSize < pipeX + pipeWidth &&
-          (coinY - coinSize < pipeHeight || coinY + coinSize > pipeHeight + pipeGap)) {
-            coinX = canvasWidth;
-            coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
-      }
+  // Générer une nouvelle piece
+  if(coinX < -coinSize) {
+    coinX = canvasWidth;
+    coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
+    while(
+        coinX + coinSize > pipeX &&
+        coinX - coinSize < pipeX + pipeWidth &&
+        (coinY - coinSize < pipeHeight || coinY + coinSize > pipeHeight + pipeGap)) {
+          coinX = canvasWidth;
+          coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
     }
   }
+}
 
 function draw() {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -153,15 +157,22 @@ intervalID = setInterval(draw, 10);
 document.addEventListener("keydown", function (event) {
   if (event.code === "Space" || event.code === "ArrowUp") {
     birdDY = -3;
+    sound_jump.play();
   }
 });
 
 
 // Fonction Game over et redémarage du jeu
 function gameOver() {
+  console.log(birdY);
+  console.log(pipeHeight);
+  console.log(birdX);
+  console.log(pipeX);
   isGameOver = true;
   clearInterval(intervalID);
   document.getElementById("restart-button").style.display = "block";
+  sound_background.pause();
+  //sound_die.play();
 }
 
 function restartGame() {
@@ -185,8 +196,6 @@ function restartGame() {
 }
 
 
-
-
  // Menus et boutons
   
  // Ajout du bouton restart :
@@ -194,39 +203,39 @@ const restartButton = document.getElementById("restart-button");
 restartButton.addEventListener("click", restartGame);
 
 
-//   //Ajout d'un menu avant de commencer une partie :
-// var isStarted = false;
+//Ajout d'un menu avant de commencer une partie :
+ var isStarted = false;
 
-// function startGame() {
-//   isStarted = true;
-//   intervalID = setInterval(draw, 10);
-// }
+ function startGame() {
+  isStarted = true;
+  intervalID = setInterval(draw, 10);
+}
 
-// function showMenu() {
-//   document.getElementById("menu").style.display = "block";
-// }
+function showMenu() {
+  document.getElementById("menu").style.display = "block";
+}
 
-// function hideMenu() {
-//   document.getElementById("menu").style.display = "none";
-// }
+function hideMenu() {
+  document.getElementById("menu").style.display = "none";
+}
 
-// document.getElementById("start-button").addEventListener("click", function () {
-//   hideMenu();
-//   startGame();
-// });
+document.getElementById("start-button").addEventListener("click", function () {
+  hideMenu();
+  startGame();
+});
 
-// document.getElementById("easy-button").addEventListener("click", function () {
-//   hideMenu();
-//   pipeGap = 200;
-//   pipeDY = -1;
-//   startGame();
-// });
+document.getElementById("easy-button").addEventListener("click", function () {
+  hideMenu();
+  pipeGap = 200;
+  pipeDY = -1;
+  startGame();
+});
 
-// document.getElementById("hard-button").addEventListener("click", function () {
-//   hideMenu();
-//   pipeGap = 75;
-//   pipeDY = -2;
-//   startGame();
-// });
+document.getElementById("hard-button").addEventListener("click", function () {
+  hideMenu();
+  pipeGap = 75;
+  pipeDY = -2;
+  startGame();
+});
 
-// showMenu();
+showMenu();

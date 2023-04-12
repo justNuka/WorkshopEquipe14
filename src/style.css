@@ -8,7 +8,7 @@ body {
     display: block;
     margin: 0 auto;
     border: 2px solid #000;
-    background: url(../img/bg-in-game.png) no-repeat;
+    background: url(img/bg-in-game.png) no-repeat;
     background-size: cover;
     width: 480px;
     height: 580px;
