@@ -6,21 +6,21 @@ const canvasHeight = 580;
 canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 
-var birdX = canvasWidth / 4;
-var birdY = canvasHeight / 2;
-var birdDY = 0;
-const birdSize = 40;
+var bossX = canvasWidth / 4;
+var bossY = canvasHeight / 2;
+var bossDY = 0;
+const bossSize = 40;
 
-var pipeX = canvasWidth;
-var pipeGap = 200;
-var pipeDY = -1.5;
-const pipeWidth = 50;
-var pipeHeight = canvasHeight - pipeGap - 50;
-var pipePassed = false;
+var obstacleX = canvasWidth;
+var obstacleGap = 100;
+var obstacleDY = -1.5;
+const obstacleWidth = 50;
+var obstacleHeight = canvasHeight - obstacleGap - 50;
+var obstaclePassed = false;
 
 var playerCoins = 0;
 var coinX = canvasWidth;
-var coinY = (canvasHeight - pipeGap);
+var coinY = (canvasHeight - obstacleGap);
 const coinSize = 40;
 
 var difficulty = 10;
@@ -44,21 +44,25 @@ const gravity = 0.1;
 const sound_background = new Audio("sounds/bgsound-30min.mp3");
 const sound_jump = new Audio("sounds/jump.ogg");
 const sound_die = new Audio("sounds/loose-sound.mp3");
+const sound_coin = new Audio("sounds/coin.mp3");
+sound_coin.volume = 0.2;
+sound_jump.volume = 0.3;
+sound_die.volume = 0.05;
 
-function drawBird() {
-  const birdImg = new Image();
-  birdImg.src = "img/flappy.png";
-  ctx.drawImage(birdImg, birdX, birdY, birdSize, birdSize);
+function drawboss() {
+  const bossImg = new Image();
+  bossImg.src = "img/flappy.png";
+  ctx.drawImage(bossImg, bossX, bossY, bossSize, bossSize);
 }
 
-function drawPipe() {
-  const pipeImgBot = new Image();
-  pipeImgBot.src = "img/top.png";
-  ctx.drawImage(pipeImgBot, pipeX, 0, pipeWidth, pipeHeight);
+function drawobstacle() {
+  const obstacleImgBot = new Image();
+  obstacleImgBot.src = "img/top.png";
+  ctx.drawImage(obstacleImgBot, obstacleX, 0, obstacleWidth, obstacleHeight);
   
-  const pipeImgTop = new Image();
-  pipeImgTop.src = "img/bot.png";
-  ctx.drawImage(pipeImgTop, pipeX, pipeHeight + pipeGap, pipeWidth, canvasHeight - pipeHeight - pipeGap);
+  const obstacleImgTop = new Image();
+  obstacleImgTop.src = "img/bot.png";
+  ctx.drawImage(obstacleImgTop, obstacleX, obstacleHeight + obstacleGap, obstacleWidth, canvasHeight - obstacleHeight - obstacleGap);
 }
 
 function drawCoin() {
@@ -74,31 +78,31 @@ function drawScore() {
   ctx.fillText("Coins: " + playerCoins, 10, 60);
 }
 
-function updateBird() {
-  birdDY += gravity;
-  birdY += birdDY;
+function updateboss() {
+  bossDY += gravity;
+  bossY += bossDY;
 }
 
-function updatePipe() {
-  pipeX -= 1;
+function updateobstacle() {
+  obstacleX -= 1;
 
-  if (pipeX <= -pipeWidth) {
-    pipeX = canvasWidth;
-    pipeHeight = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
-    pipePassed = false;
+  if (obstacleX <= -obstacleWidth) {
+    obstacleX = canvasWidth;
+    obstacleHeight = Math.floor(Math.random() * (canvasHeight - obstacleGap - 100)) + 50;
+    obstaclePassed = false;
     coinPassed = false;
   }
 
-  if (pipeX === birdX - pipeWidth / 2) {
+  if (obstacleX === bossX - obstacleWidth / 2) {
     score++;
-    pipePassed = true;
+    obstaclePassed = true;
   }
 
-  // Check collision with pipes
+  // Check collision with obstacles
   if (
-    birdX + birdSize > pipeX && 
-    birdX < pipeX + pipeWidth &&
-    (birdY < pipeHeight || birdY + birdSize > pipeHeight + pipeGap)
+    bossX + bossSize > obstacleX && 
+    bossX < obstacleX + obstacleWidth &&
+    (bossY < obstacleHeight || bossY + bossSize > obstacleHeight + obstacleGap)
     ){
     gameOver();
   }
@@ -107,13 +111,14 @@ function updatePipe() {
 function updateCoin() {
   coinX -= 1;
 
-  // Check collision with bird
+  // Check collision with boss
   if (
-    birdX + birdSize > coinX &&
-    birdX - birdSize < coinX + coinSize &&
-    birdY + birdSize > coinY &&
-    birdY - birdSize < coinY + coinSize
+    bossX + bossSize > coinX &&
+    bossX - bossSize < coinX + coinSize &&
+    bossY + bossSize > coinY &&
+    bossY - bossSize < coinY + coinSize
   ) {
+    sound_coin.play();
     playerCoins++;
     coinX = -coinSize;
   }
@@ -122,14 +127,14 @@ function updateCoin() {
   if(coinX < -coinSize) {
     do {
       coinX = canvasWidth;
-      coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
+      coinY = Math.floor(Math.random() * (canvasHeight - obstacleGap - 100)) + 50;
     }
     while(
-        coinX + coinSize > pipeX &&
-        coinX - coinSize < pipeX + pipeWidth &&
-        (coinY - coinSize < pipeHeight || coinY + coinSize > pipeHeight + pipeGap)) {
+        coinX + coinSize > obstacleX &&
+        coinX - coinSize < obstacleX + obstacleWidth &&
+        (coinY - coinSize < obstacleHeight || coinY + coinSize > obstacleHeight + obstacleGap)) {
           coinX = canvasWidth;
-          coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
+          coinY = Math.floor(Math.random() * (canvasHeight - obstacleGap - 100)) + 50;
     }
   }
 }
@@ -140,21 +145,21 @@ function setDifficulty(event) {
     case "easy":
       gameOver();
       difficulty = 10;
-      pipeGap = 200;
+      obstacleGap = 200;
       event.target.blur();
       restartGame();
       break;
     case "medium":
       gameOver();
       difficulty = 9;
-      pipeGap = 150;
+      obstacleGap = 150;
       event.target.blur();
       restartGame();
       break;
     case "hard":
       gameOver();
       difficulty = 8;
-      pipeGap = 100;
+      obstacleGap = 100;
       event.target.blur();
       restartGame();
       break;
@@ -164,16 +169,16 @@ function setDifficulty(event) {
 function draw() {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-  updateBird();
-  updatePipe();
+  updateboss();
+  updateobstacle();
   updateCoin();
 
-  drawPipe();
-  drawBird();
+  drawobstacle();
+  drawboss();
   drawScore();
   drawCoin();
 
-  if (birdY + birdSize > canvasHeight || birdY - birdSize < 0) {
+  if (bossY + bossSize > canvasHeight) {
     gameOver();
   }
 
@@ -183,8 +188,8 @@ function draw() {
     ctx.fillText("Game Over", canvasWidth / 2 - 120, canvasHeight / 2);
   }
 
-  if (pipePassed && pipeX < birdX) {
-    pipePassed = false;
+  if (obstaclePassed && obstacleX < bossX) {
+    obstaclePassed = false;
   }
 }
 
@@ -198,7 +203,7 @@ intervalID = setInterval(draw, difficulty);
 // Déplacement du personnage
 document.addEventListener("keydown", function (event) {
   if (event.code === "Space" || event.code === "ArrowUp") {
-    birdDY = -3;
+    bossDY = -3;
     sound_jump.play();
   }
 });
@@ -206,36 +211,39 @@ document.addEventListener("keydown", function (event) {
 
 // Fonction Game over et redémarage du jeu
 function gameOver() {
-  console.log(birdY);
-  console.log(pipeHeight);
-  console.log(birdX);
-  console.log(pipeX);
+  console.log(bossY);
+  console.log(obstacleHeight);
+  console.log(bossX);
+  console.log(obstacleX);
   isGameOver = true;
   clearInterval(intervalID);
   document.getElementById("restart-button").style.display = "block";
   sound_background.pause();
-  //sound_die.play();
+  sound_die.play();
+  sound_jump.volume = 0;
 }
 
 function restartGame() {
-  birdX = canvasWidth / 4;
-  birdY = canvasHeight / 2;
-  birdDY = 0;
+  bossX = canvasWidth / 4;
+  bossY = canvasHeight / 2;
+  bossDY = 0;
 
-  pipeX = canvasWidth;
-  pipeGap = 100;
-  pipeDY = -1.5;
-  pipeHeight = canvasHeight - pipeGap - 50;
-  pipePassed = false;
+  obstacleX = canvasWidth;
+  obstacleGap = 100;
+  obstacleDY = -1.5;
+  obstacleHeight = canvasHeight - obstacleGap - 50;
+  obstaclePassed = false;
 
   coinX = canvasWidth;
-  coinY = pipeHeight;
+  coinY = obstacleHeight;
 
   score = 0;
 
   isGameOver = false;
 
   document.getElementById("restart-button").style.display = "none";
+
+  sound_jump.volume = 0.3;
 
   intervalID = setInterval(draw, difficulty);
 }
@@ -271,15 +279,15 @@ document.getElementById("start-button").addEventListener("click", function () {
 
 document.getElementById("easy-button").addEventListener("click", function () {
   hideMenu();
-  pipeGap = 200;
-  pipeDY = -1;
+  obstacleGap = 200;
+  obstacleDY = -1;
   startGame();
 });
 
 document.getElementById("hard-button").addEventListener("click", function () {
   hideMenu();
-  pipeGap = 75;
-  pipeDY = -2;
+  obstacleGap = 75;
+  obstacleDY = -2;
   startGame();
 });
 
