@@ -9,28 +9,29 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div id="menu">
-      <h1>Flappy Bird</h1>
-      <p>Welcome! Choose your difficulty level:</p>
-      <button id="easy-button">Easy</button>
-      <button id="medium-button">Medium</button>
-      <button id="hard-button">Hard</button>
+
+    <div class="boutons">
+      <a href="index.html"><button>Retour à la page d'accueil</button></a>
+    </div>
+
+    <div class="difficulty">
+      <div>
+          <h1>Flappy Boss</h1>
+          <h2>Choisissez votre difficulté</h2>
+          <button id="easy">Facile</button>
+          <button id="medium">Moyen</button>
+          <button id="hard">Difficile</button>
+        </div>
     </div>
 
     <canvas id="canvas"></canvas>
-
-    <div id="form-container">
-      <form id="form">
-        <label for="username">Enter your username:</label>
-        <input type="text" id="username" name="username">
-        <button type="submit">Start game</button>
-      </form>
-    </div>
 
     <div id="game-over"></div>
 
     <button id="restart-button" style="display: none;">Restart Game</button>
 
-    <script src="script.js"></script>
+    <script src="script.js">
+      startGame();
+    </script>
   </body>
 </html>

@@ -7,9 +7,21 @@
     <title>Acueil Flappy Boss</title>
 </head>
 <body>
-    <div>
-        <a href="game.html"><button>Go jouer</button></a>
+    <div class="buttons">
         <a href="leaderboard.html"><button>Classement</button></a>
+    </div>
+    <script src="script.js"></script>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="formGame">
+        <div id="form-container">
+            <form id="form">
+              <label for="username">Enter your username:</label>
+              <input type="text" id="username" name="username">
+              <a href="game.html"><button type="submit">Start game</button></a>
+            </form>
+          </div>
     </div>
 </body>
 </html>

@@ -1,8 +1,8 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const canvasWidth = 400;
-const canvasHeight = 500;
+const canvasWidth = 480;
+const canvasHeight = 580;
 canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 
@@ -23,6 +23,16 @@ var coinX = canvasWidth;
 var coinY = (canvasHeight - pipeGap);
 const coinSize = 40;
 
+var difficulty = 10;
+
+// Ajout d'un écouteur d'événements sur les boutons de difficulté
+const easyButton = document.getElementById("easy");
+const mediumButton = document.getElementById("medium");
+const hardButton = document.getElementById("hard");
+easyButton.addEventListener("click", setDifficulty);
+mediumButton.addEventListener("click", setDifficulty);
+hardButton.addEventListener("click", setDifficulty);
+
 var score = 0;
 
 var intervalID;
@@ -34,31 +44,6 @@ const gravity = 0.1;
 const sound_background = new Audio("sounds/bgsound-30min.mp3");
 const sound_jump = new Audio("sounds/jump.ogg");
 const sound_die = new Audio("sounds/loose-sound.mp3");
-sound_background.play();
-
-// Récupération du formulaire et du champ de texte
-const form = document.querySelector('#form');
-const inputName = document.querySelector('#inputName');
-
-// Ecoute de l'événement submit sur le formulaire
-form.addEventListener('submit', (event) => {
-  event.preventDefault(); // Empêche le formulaire de se soumettre
-
-  // Récupération du nom entré par le joueur
-  const playerName = inputName.value.trim();
-
-  // Vérification que le nom est valide
-  if (playerName === '') {
-    alert('Veuillez entrer un nom valide');
-    return;
-  }
-
-  // Stockage du nom dans le local storage
-  localStorage.setItem('playerName', playerName);
-
-  // Démarrage du jeu
-  startGame();
-});
 
 function drawBird() {
   const birdImg = new Image();
@@ -149,6 +134,33 @@ function updateCoin() {
   }
 }
 
+function setDifficulty(event) {
+  const selectedDifficulty = event.target.id;
+  switch (selectedDifficulty) {
+    case "easy":
+      gameOver();
+      difficulty = 10;
+      pipeGap = 200;
+      event.target.blur();
+      restartGame();
+      break;
+    case "medium":
+      gameOver();
+      difficulty = 9;
+      pipeGap = 150;
+      event.target.blur();
+      restartGame();
+      break;
+    case "hard":
+      gameOver();
+      difficulty = 8;
+      pipeGap = 100;
+      event.target.blur();
+      restartGame();
+      break;
+  }
+}
+
 function draw() {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -180,7 +192,7 @@ function draw() {
 // Classement
 
 
-intervalID = setInterval(draw, 10);
+intervalID = setInterval(draw, difficulty);
 
 
 // Déplacement du personnage
@@ -225,7 +237,7 @@ function restartGame() {
 
   document.getElementById("restart-button").style.display = "none";
 
-  intervalID = setInterval(draw, 10);
+  intervalID = setInterval(draw, difficulty);
 }
 
 
