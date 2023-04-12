@@ -1,0 +1,35 @@
+body {
+    background-image: url('img/bg-in-game.png');
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+}
+
+.menu {
+    max-width: 800px;
+    /* ajustez la valeur selon vos préférences */
+    margin: 0 auto; 
+}
+
+.menu .menu-title {
+    color: aliceblue;
+    font-size: 60px;
+}
+.name {
+    color: aliceblue;
+    font-size: 50px;
+    font-weight: bold;
+}
+button {
+    font-size: 30px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+  }
+
+  .button1 {
+    align-items: center;
+  }
+  .input1 {
+    width: 200px;
+    height: 30px;
+  }
