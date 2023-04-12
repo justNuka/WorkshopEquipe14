@@ -36,6 +36,30 @@ const sound_jump = new Audio("sounds/jump.ogg");
 const sound_die = new Audio("sounds/loose-sound.mp3");
 sound_background.play();
 
+// Récupération du formulaire et du champ de texte
+const form = document.querySelector('#form');
+const inputName = document.querySelector('#inputName');
+
+// Ecoute de l'événement submit sur le formulaire
+form.addEventListener('submit', (event) => {
+  event.preventDefault(); // Empêche le formulaire de se soumettre
+
+  // Récupération du nom entré par le joueur
+  const playerName = inputName.value.trim();
+
+  // Vérification que le nom est valide
+  if (playerName === '') {
+    alert('Veuillez entrer un nom valide');
+    return;
+  }
+
+  // Stockage du nom dans le local storage
+  localStorage.setItem('playerName', playerName);
+
+  // Démarrage du jeu
+  startGame();
+});
+
 function drawBird() {
   const birdImg = new Image();
   birdImg.src = "img/flappy.png";
@@ -111,8 +135,10 @@ function updateCoin() {
 
   // Générer une nouvelle piece
   if(coinX < -coinSize) {
-    coinX = canvasWidth;
-    coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
+    do {
+      coinX = canvasWidth;
+      coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
+    }
     while(
         coinX + coinSize > pipeX &&
         coinX - coinSize < pipeX + pipeWidth &&
@@ -150,6 +176,10 @@ function draw() {
   }
 }
 
+
+// Classement
+
+
 intervalID = setInterval(draw, 10);
 
 
@@ -185,6 +215,9 @@ function restartGame() {
   pipeDY = -1.5;
   pipeHeight = canvasHeight - pipeGap - 50;
   pipePassed = false;
+
+  coinX = canvasWidth;
+  coinY = pipeHeight;
 
   score = 0;
 
