@@ -1,151 +1,15 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <title>Classement</title>
-    <style>
-        body {
-            background-image: url('img/bg-in-game.png');
-            background-size: cover;
-            background-position: center center;
-            position: relative;
-          }
-          
-          .bg-filter {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: -1;
-          }
-          
-        .leaderboard {
-            background-image: url('background.jpg');
-            background-size: cover;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .score-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .score-card.gold {
-            background-color: #eecd0f;
-        }
-
-        .score-card.silver {
-            background-color: #C0C0C0;
-        }
-
-        .score-card.bronze {
-            background-color: #cd7f32;
-        }
-
-        .medal {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            background-color: #f98f0e;
-            margin-right: 10px;
-        }
-
-        .medal i {
-            color: white;
-            font-size: 30px;
-        }
-
-        .name {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .score {
-            font-size: 18px;
-        }
-
-        .close-button {
-            display: block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            border-radius: 5px;
-            background-color: #FFD700;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .leaderboard-container {
-            max-width: 800px;
-            /* ajustez la valeur selon vos préférences */
-            margin: 0 auto;
-            /* centrer la div horizontalement */
-        }
-    </style>
-</head>
-
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="../img/flappy.png" type="image/x-icon">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <title>Classement</title>
+        <link rel="stylesheet" href="main.css">
+    </head>
 <body>
-    <!--
-        <?php
-    // Connexion à la base de données
-    $conn = mysqli_connect("localhost", "user", "password", "database");
-
-    // Récupération des 5 meilleurs scores
-    $query = "SELECT * FROM scores ORDER BY score DESC LIMIT 5";
-    $result = mysqli_query($conn, $query);
-
-    // Affichage des scores
-    $rank = 1;
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "<li class='score-item'>";
-        echo "<span class='score-rank'>$rank</span>";
-        echo "<span class='score-name'>" . htmlspecialchars($row['player_name']) . "</span>";
-        echo "<span class='score-value'>" . htmlspecialchars($row['score']) . "</span>";
-        echo "</li>";
-        $rank++;
-    }
-?>
-
-
-<div class="leaderboard">
-    <h2>Classement</h2>
-    <ul>
-        <?php
-            // Affichage des scores
-            $rank = 1;
-            while ($row = mysqli_fetch_assoc($result)) {
-                $class = "score-item";
-                if ($rank == 1) {
-                    $class .= " top1";
-                } else if ($rank == 2) {
-                    $class .= " top2";
-                } else if ($rank == 3) {
-                    $class .= " top3";
-                }
-                echo "<li class='$class'>";
-                echo "<span class='score-rank'>$rank</span>";
-                echo "<span class='score-name'>" . htmlspecialchars($row['player_name']) . "</span>";
-                echo "<span class='score-value'>" . htmlspecialchars($row['score']) . "</span>";
-                echo "<span class='score-icon'><i class='fas fa-trophy'></i></span>";
-                echo "</li>";
-                $rank++;
-            }
-        ?>
-    </ul>
-    -->
     <div class="leaderboard-container">
         <h2 style="color: aliceblue;">Classement</h2>
         <div class="score-card gold">
@@ -171,9 +35,40 @@
             <div class="name">Joueur 5</div>
             <div class="score">600 pts</div>
         </div>
-        <button class="close-button">Fermer</button>
+        <a href="index.html"><button class="close-button">Retour</button></a>
     </div>
     </div>
+
+    <script>
+        // Envoi d'une requête AJAX GET à l'end point /leaderboard pour récupérer les données
+        $.ajax({
+        type: "GET",
+        url: "https://temp3.leod1.site/leaderboard",
+        success: function(data) {
+            // Récupération des données et tri par score décroissant
+            const leaderboard = data.sort((a, b) => b.score - a.score);
+            console.log(leaderboard);
+            
+            // Affichage des données dans les score-cards
+            for (let i = 0; i < leaderboard.length && i < 5; i++) {
+            const scoreCard = $(".score-card").eq(i);
+            if (i == 0) {
+                scoreCard.addClass("gold");
+                scoreCard.find(".medal i").removeClass("fa-trophy").addClass("fa-trophy-alt");
+            } else if (i == 1) {
+                scoreCard.addClass("silver");
+            } else if (i == 2) {
+                scoreCard.addClass("bronze");
+            }
+            scoreCard.find(".name").text(leaderboard[i].pseudo);
+            scoreCard.find(".score").text(leaderboard[i].score + " pts");
+            }
+        },
+        error: function() {
+            console.log("Une erreur s'est produite lors de la récupération des données");
+        }
+        });
+    </script>
 </body>
 
 </html>
