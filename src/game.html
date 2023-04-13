@@ -5,31 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../img/flappy.png" type="image/x-icon">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Flappy Boss</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
 
-    <div class="boutons">
-      <a href="index.html"><button>Retour à la page d'accueil</button></a>
-    </div>
+    
+    <a id="back-button" href="index.html"><button id='return-button' class="button">Retour à la page d'accueil</button></a>
+    
 
     <div class="difficulty">
       <div>
+        <div class="game-title">
+          <img src="/src/img/dwight.png" alt="" class="title-deco">
           <h1>Flappy Boss</h1>
-          <h2>Choisissez votre difficulté</h2>
-          <button id="easy">Facile</button>
-          <button id="medium">Moyen</button>
-          <button id="hard">Difficile</button>
+          <img src="/src/img/dwight.png" alt="" class="title-deco">
         </div>
+        <h2 id="difficulty-menu-title">Choisissez votre difficulté</h2>
+        <button id="easy" class="button">Facile</button>
+        <button id="medium" class="button">Moyen</button>
+        <button id="hard" class="button">Difficile</button>
+      </div>
     </div>
 
     <canvas id="canvas"></canvas>
 
     <div id="game-over"></div>
 
-    <button id="restart-button" style="display: none;">Restart Game</button>
+    <button id="restart-button" class="button" style="display: none;">Restart Game</button>
 
     <script src="script.js">
       startGame();

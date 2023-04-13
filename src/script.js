@@ -72,7 +72,7 @@ function drawCoin() {
 }
 
 function drawScore() {
-  ctx.fillStyle = "black";
+  ctx.fillStyle = "white";
   ctx.font = "24px Arial";
   ctx.fillText("Score: " + score, 10, 30);
   ctx.fillText("Coins: " + playerCoins, 10, 60);
@@ -242,7 +242,7 @@ function gameOver() {
     error: function() {
       console.log("Une erreur s'est produite lors de l'ajout des données");
     }
-  });
+  }); 
 }
 
 function restartGame() {

@@ -1,13 +1,80 @@
 body {
-    margin: 0;
-    padding: 0;
-    background: white;
+  margin: 20;
+  padding: 20;
+  background: #f0f0f0;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  letter-spacing: 0.1em;
 }
-  
+
 canvas {
-  display: block;
-  margin: 0 auto;
-  border: 2px solid #000;
-  background: url(img/bg-in-game.png) no-repeat;
-  background-size: cover;
+display: block;
+margin: 0 auto;
+border: 2px solid #000;
+background: url(img/bg-in-game.png) no-repeat;
+background-size: cover;
 }  
+
+/* NAV BUTTON */
+#back-button{
+text-decoration: none;
+}
+#return-button{
+  width: 200px;
+}
+/* NAV BUTTON END */
+
+
+
+/* title */
+.game-title{
+display: inline-flex;
+margin-left: 40%;
+
+}
+.title-deco{
+width: 64px;
+height: 64px;
+}
+/* title end */
+
+
+/* difficulty menu title */
+#difficulty-menu-title{
+  font-family: 'Times New Roman', Times, serif;
+}
+/* difficulty menu title end */
+
+/* DIFFICULTY BUTTON */
+.difficulty{
+margin-left: 10px;
+}
+.button {
+display: inline-flex;
+height: 40px;
+width: 100px;
+border: 2px solid #BFC0C0;
+margin: 20px 20px 20px 0px;
+color: black;
+text-transform: uppercase;
+text-decoration: none;
+font-size: .8em;
+letter-spacing: 1.5px;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+box-shadow: 0 0 10px rgba(0,0,0,0.1);
+-webkit-transition-duration: 0.3s;
+transition-duration: 0.3s;
+-webkit-transition-property: box-shadow,transform ;
+transition-property: box-shadow,transform;
+}
+.button:hover, .button:focus, .button:active{
+box-shadow: 0 0 10px rgba(0,0,0,0.5);
+-webkit-transform: scale(1.1);
+transform: scale(1.1);
+}
+#restart-button{
+color: red;
+border: 2px solid #b90e0a;
+}
+/* DIFFICULTY BUTTON END */

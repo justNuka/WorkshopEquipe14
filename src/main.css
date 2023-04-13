@@ -6,24 +6,93 @@ body {
 .menu {
   max-width: 800px;
   /* ajustez la valeur selon vos préférences */
-  margin: 0 auto; 
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .menu .menu-title {
   color: aliceblue;
   font-size: 60px;
 }
-.name {
+
+.menu-button{
+  margin-left: 40%;
+}
+
+/* animation for title */
+.textanime{
+  margin-top: 100px;
+}
+.textanime h1 {
+  text-align: center;
+  color: #fff;
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: .15em solid black; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+  animation: 
+    typing 3.5s steps(30, end),
+    blink-caret .5s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 20% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: black }
+}
+/* animation for title end */
+
+.formGame{
+  margin-left: 15%;
+}
+.menu .name {
   color: aliceblue;
-  font-size: 50px;
+  font-size: 25px;
   font-weight: bold;
 }
+
+/* GENERAL STYLE FOR BUTTON */
 button {
   font-size: 30px;
   margin-bottom: 10px;
   border-radius: 20px;
 }
 
+.button {
+  display: inline-flex;
+  height: 40px;
+  width: 200px;
+  border: 2px solid #BFC0C0;
+  margin: 20px 20px 20px 0px;
+  color: black;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: .8em;
+  letter-spacing: 1.5px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: box-shadow,transform ;
+  transition-property: box-shadow,transform;
+  }
+.button:hover, .button:focus, .button:active{
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+/* GENERAL STYLE BUTTON END */
+#start-button{
+  margin-left: 10px;
+}
 .button1 {
   align-items: center;
 }
@@ -33,9 +102,35 @@ button {
 }
 
 .descriptif {
+  border-radius: 20px;
+  padding: 20px;
+  background-color: lightgray;
+  margin-left: 20%;
+  /* text-align: center; */
+  color:  black;
+  font-size: 20px;
+  width: fit-content;
+}
+
+.descriptif-title{
   text-align: center;
-  color:  aliceblue;
-  font-size: 30px;
+  font-size: 40px;
+  color: aliceblue;
+}
+
+.para {
+  border-radius: 20px;
+  padding: 20px;
+  background-color: lightgray;
+  margin-left: 20%;
+  /* text-align: center; */
+  color:  black;
+  font-size: 20px;
+  width: fit-content;
+}
+#paragraph{
+  color: black;
+  font-size: 20px;
 }
 
 .bg-filter {
