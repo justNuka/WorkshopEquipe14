@@ -35,5 +35,6 @@ Ce projet a été réalisé par l'équipe 14  dans le cadre d'un projet scolaire
 ## Remarques
 
 Ce jeu peu etre inspirer du célèbre jeu Flappy Bird. Il est destiné à des fins éducatives et ne doit pas être utilisé à des fins commerciales.
-
+Afin d'implémenter un système de classement, le jeu utilise une api stocké sur repo à part dont voici le lien :
+https://github.com/justNuka/apiWorkshop.git
 
