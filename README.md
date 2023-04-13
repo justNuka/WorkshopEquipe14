@@ -14,7 +14,7 @@ Ce projet contient un jeu "Flappy Bird" dans lequel le joueur doit aider un oise
 
 Le joueur peut accéder au jeu en cliquant sur le bouton "Go jouer" sur la page d'accueil. Le jeu démarre immédiatement et le joueur doit utiliser la touche espace ou cliquer pour faire voler l'oiseau et éviter les tuyaux.
 
-Le joueur doit collecter des pièces tout au long du jeu pour augmenter son score. Si le joueur touche un tuyau ou tombe en dehors de l'écran, le jeu se termine et le score est affiché.
+Le joueur doit collecter des pièces tout au long du jeu pour augmenter son score. Si le joueur touche un obstacles ou tombe en dehors de l'écran, le jeu se termine et le score est affiché.
 
 ## Technologies utilisées
 
@@ -24,9 +24,17 @@ Le projet utilise les technologies suivantes:
 - CSS3
 - JavaScript
 
-## Comment exécuter le projet
+## Fonctionnalités
+- Trois niveaux de difficulté
+Le score est calculé en fonction du nombre d'obstacles passés et du nombre de pièces collectées
+- Les pièces sont générées aléatoirement
+- Les obstacles sont générés aléatoirement avec un écart dépendant du niveau de difficulté
+- Le jeu se termine lorsque l'oiseau entre en collision avec un obstacle
 
-Pour exécuter le projet, il suffit de télécharger tous les fichiers et de les ouvrir dans un navigateur web. Le fichier "index.html" doit être ouvert pour accéder à la page d'accueil.
+## Comment lancer le jeu
+
+1. Clonez ce dépôt sur votre ordinateur
+2. Ouvrez le fichier index.html dans votre navigateur
 
 ## Auteur
 
