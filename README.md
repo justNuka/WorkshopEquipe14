@@ -28,7 +28,7 @@ Le projet utilise les technologies suivantes:
 - Trois niveaux de difficulté
 Le score est calculé en fonction du nombre d'obstacles passés et du nombre de pièces collectées
 - Les pièces sont générées aléatoirement
-- Les obstacles sont générés aléatoirement avec un écart dépendant du niveau de difficulté
+- Les obstacles sont générés aléatoirement à une vitesse dépendant du niveau de difficulté
 - Le jeu se termine lorsque l'oiseau entre en collision avec un obstacle
 
 ## Comment lancer le jeu
