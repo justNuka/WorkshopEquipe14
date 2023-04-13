@@ -1,21 +1,25 @@
 body {
   background :url('img/bg-in-game.png') no-repeat;
   background-size: cover;
+
 }
 
 .menu {
   max-width: 800px;
   /* ajustez la valeur selon vos préférences */
   margin: 0 auto; 
+ 
 }
 
-.menu .menu-title {
+.menu-title {
   color: aliceblue;
-  font-size: 60px;
+  font-size: 30px;
+  text-align: center;
+  margin-top: 100PX;
 }
-.name {
+.menu .name {
   color: aliceblue;
-  font-size: 50px;
+  font-size: 43px;
   font-weight: bold;
 }
 button {
@@ -24,7 +28,14 @@ button {
   border-radius: 20px;
 }
 
-.button1 {
+.menu .button1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+   
+}
+
+.menu .button2 {
   align-items: center;
 }
 .input1 {
