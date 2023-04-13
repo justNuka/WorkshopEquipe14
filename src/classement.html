@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="../img/flappy.png" type="image/x-icon">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <title>Classement</title>
+        <link rel="stylesheet" href="main.css">
+    </head>
+<body>
+    <div class="leaderboard-container">
+        <h2 style="color: aliceblue;">Classement</h2>
+        <div class="score-card gold">
+            <div class="medal"><i class="fa fa-trophy"></i></div>
+            <div class="name">Joueur 1</div>
+            <div class="score">1000 pts</div>
+        </div>
+        <div class="score-card silver">
+            <div class="medal"><i class="fa fa-trophy"></i></div>
+            <div class="name">Joueur 2</div>
+            <div class="score">900 pts</div>
+        </div>
+        <div class="score-card bronze">
+            <div class="medal"><i class="fa fa-trophy"></i></div>
+            <div class="name">Joueur 3</div>
+            <div class="score">800 pts</div>
+        </div>
+        <div class="score-card">
+            <div class="name">Joueur 4</div>
+            <div class="score">700 pts</div>
+        </div>
+        <div class="score-card">
+            <div class="name">Joueur 5</div>
+            <div class="score">600 pts</div>
+        </div>
+        <a href="index.html"><button class="close-button">Retour</button></a>
+    </div>
+    </div>
+
+    <script>
+        // Envoi d'une requête AJAX GET à l'end point /leaderboard pour récupérer les données
+        $.ajax({
+        type: "GET",
+        url: "https://temp3.leod1.site/leaderboard",
+        success: function(data) {
+            // Récupération des données et tri par score décroissant
+            const leaderboard = data.sort((a, b) => b.score - a.score);
+            console.log(leaderboard);
+            
+            // Affichage des données dans les score-cards
+            for (let i = 0; i < leaderboard.length && i < 5; i++) {
+            const scoreCard = $(".score-card").eq(i);
+            if (i == 0) {
+                scoreCard.addClass("gold");
+                scoreCard.find(".medal i").removeClass("fa-trophy").addClass("fa-trophy-alt");
+            } else if (i == 1) {
+                scoreCard.addClass("silver");
+            } else if (i == 2) {
+                scoreCard.addClass("bronze");
+            }
+            scoreCard.find(".name").text(leaderboard[i].pseudo);
+            scoreCard.find(".score").text(leaderboard[i].score + " pts");
+            }
+        },
+        error: function() {
+            console.log("Une erreur s'est produite lors de la récupération des données");
+        }
+        });
+    </script>
+</body>
+
+</html>

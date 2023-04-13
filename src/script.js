@@ -1,27 +1,37 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const canvasWidth = 400;
-const canvasHeight = 500;
+const canvasWidth = 480;
+const canvasHeight = 580;
 canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 
-var birdX = canvasWidth / 4;
-var birdY = canvasHeight / 2;
-var birdDY = 0;
-const birdSize = 40;
+var bossX = canvasWidth / 4;
+var bossY = canvasHeight / 2;
+var bossDY = 0;
+const bossSize = 40;
 
-var pipeX = canvasWidth;
-var pipeGap = 200;
-var pipeDY = -1.5;
-const pipeWidth = 50;
-var pipeHeight = canvasHeight - pipeGap - 50;
-var pipePassed = false;
+var obstacleX = canvasWidth;
+var obstacleGap = 100;
+var obstacleDY = -1.5;
+const obstacleWidth = 50;
+var obstacleHeight = canvasHeight - obstacleGap - 50;
+var obstaclePassed = false;
 
 var playerCoins = 0;
 var coinX = canvasWidth;
-var coinY = (canvasHeight - pipeGap);
+var coinY = (canvasHeight - obstacleGap);
 const coinSize = 40;
+
+var difficulty = 10;
+
+// Ajout d'un écouteur d'événements sur les boutons de difficulté
+const easyButton = document.getElementById("easy");
+const mediumButton = document.getElementById("medium");
+const hardButton = document.getElementById("hard");
+easyButton.addEventListener("click", setDifficulty);
+mediumButton.addEventListener("click", setDifficulty);
+hardButton.addEventListener("click", setDifficulty);
 
 var score = 0;
 
@@ -34,46 +44,25 @@ const gravity = 0.1;
 const sound_background = new Audio("sounds/bgsound-30min.mp3");
 const sound_jump = new Audio("sounds/jump.ogg");
 const sound_die = new Audio("sounds/loose-sound.mp3");
-sound_background.play();
+const sound_coin = new Audio("sounds/coin.mp3");
+sound_coin.volume = 0.2;
+sound_jump.volume = 0.3;
+sound_die.volume = 0.05;
 
-// Récupération du formulaire et du champ de texte
-const form = document.querySelector('#form');
-const inputName = document.querySelector('#inputName');
-
-// Ecoute de l'événement submit sur le formulaire
-form.addEventListener('submit', (event) => {
-  event.preventDefault(); // Empêche le formulaire de se soumettre
-
-  // Récupération du nom entré par le joueur
-  const playerName = inputName.value.trim();
-
-  // Vérification que le nom est valide
-  if (playerName === '') {
-    alert('Veuillez entrer un nom valide');
-    return;
-  }
-
-  // Stockage du nom dans le local storage
-  localStorage.setItem('playerName', playerName);
-
-  // Démarrage du jeu
-  startGame();
-});
-
-function drawBird() {
-  const birdImg = new Image();
-  birdImg.src = "img/flappy.png";
-  ctx.drawImage(birdImg, birdX, birdY, birdSize, birdSize);
+function drawboss() {
+  const bossImg = new Image();
+  bossImg.src = "img/flappy.png";
+  ctx.drawImage(bossImg, bossX, bossY, bossSize, bossSize);
 }
 
-function drawPipe() {
-  const pipeImgBot = new Image();
-  pipeImgBot.src = "img/top.png";
-  ctx.drawImage(pipeImgBot, pipeX, 0, pipeWidth, pipeHeight);
+function drawobstacle() {
+  const obstacleImgBot = new Image();
+  obstacleImgBot.src = "img/top.png";
+  ctx.drawImage(obstacleImgBot, obstacleX, 0, obstacleWidth, obstacleHeight);
   
-  const pipeImgTop = new Image();
-  pipeImgTop.src = "img/bot.png";
-  ctx.drawImage(pipeImgTop, pipeX, pipeHeight + pipeGap, pipeWidth, canvasHeight - pipeHeight - pipeGap);
+  const obstacleImgTop = new Image();
+  obstacleImgTop.src = "img/bot.png";
+  ctx.drawImage(obstacleImgTop, obstacleX, obstacleHeight + obstacleGap, obstacleWidth, canvasHeight - obstacleHeight - obstacleGap);
 }
 
 function drawCoin() {
@@ -89,31 +78,31 @@ function drawScore() {
   ctx.fillText("Coins: " + playerCoins, 10, 60);
 }
 
-function updateBird() {
-  birdDY += gravity;
-  birdY += birdDY;
+function updateboss() {
+  bossDY += gravity;
+  bossY += bossDY;
 }
 
-function updatePipe() {
-  pipeX -= 1;
+function updateobstacle() {
+  obstacleX -= 1;
 
-  if (pipeX <= -pipeWidth) {
-    pipeX = canvasWidth;
-    pipeHeight = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
-    pipePassed = false;
+  if (obstacleX <= -obstacleWidth) {
+    obstacleX = canvasWidth;
+    obstacleHeight = Math.floor(Math.random() * (canvasHeight - obstacleGap - 100)) + 50;
+    obstaclePassed = false;
     coinPassed = false;
   }
 
-  if (pipeX === birdX - pipeWidth / 2) {
+  if (obstacleX === bossX - obstacleWidth / 2) {
     score++;
-    pipePassed = true;
+    obstaclePassed = true;
   }
 
-  // Check collision with pipes
+  // Check collision with obstacles
   if (
-    birdX + birdSize > pipeX && 
-    birdX < pipeX + pipeWidth &&
-    (birdY < pipeHeight || birdY + birdSize > pipeHeight + pipeGap)
+    bossX + bossSize > obstacleX && 
+    bossX < obstacleX + obstacleWidth &&
+    (bossY < obstacleHeight || bossY + bossSize > obstacleHeight + obstacleGap)
     ){
     gameOver();
   }
@@ -122,13 +111,14 @@ function updatePipe() {
 function updateCoin() {
   coinX -= 1;
 
-  // Check collision with bird
+  // Check collision with boss
   if (
-    birdX + birdSize > coinX &&
-    birdX - birdSize < coinX + coinSize &&
-    birdY + birdSize > coinY &&
-    birdY - birdSize < coinY + coinSize
+    bossX + bossSize > coinX &&
+    bossX - bossSize < coinX + coinSize &&
+    bossY + bossSize > coinY &&
+    bossY - bossSize < coinY + coinSize
   ) {
+    sound_coin.play();
     playerCoins++;
     coinX = -coinSize;
   }
@@ -137,31 +127,58 @@ function updateCoin() {
   if(coinX < -coinSize) {
     do {
       coinX = canvasWidth;
-      coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
+      coinY = Math.floor(Math.random() * (canvasHeight - obstacleGap - 100)) + 50;
     }
     while(
-        coinX + coinSize > pipeX &&
-        coinX - coinSize < pipeX + pipeWidth &&
-        (coinY - coinSize < pipeHeight || coinY + coinSize > pipeHeight + pipeGap)) {
+        coinX + coinSize > obstacleX &&
+        coinX - coinSize < obstacleX + obstacleWidth &&
+        (coinY - coinSize < obstacleHeight || coinY + coinSize > obstacleHeight + obstacleGap)) {
           coinX = canvasWidth;
-          coinY = Math.floor(Math.random() * (canvasHeight - pipeGap - 100)) + 50;
+          coinY = Math.floor(Math.random() * (canvasHeight - obstacleGap - 100)) + 50;
     }
+  }
+}
+
+function setDifficulty(event) {
+  const selectedDifficulty = event.target.id;
+  switch (selectedDifficulty) {
+    case "easy":
+      gameOver();
+      difficulty = 10;
+      obstacleGap = 200;
+      event.target.blur();
+      restartGame();
+      break;
+    case "medium":
+      gameOver();
+      difficulty = 9;
+      obstacleGap = 150;
+      event.target.blur();
+      restartGame();
+      break;
+    case "hard":
+      gameOver();
+      difficulty = 8;
+      obstacleGap = 100;
+      event.target.blur();
+      restartGame();
+      break;
   }
 }
 
 function draw() {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-  updateBird();
-  updatePipe();
+  updateboss();
+  updateobstacle();
   updateCoin();
 
-  drawPipe();
-  drawBird();
+  drawobstacle();
+  drawboss();
   drawScore();
   drawCoin();
 
-  if (birdY + birdSize > canvasHeight || birdY - birdSize < 0) {
+  if (bossY + bossSize > canvasHeight) {
     gameOver();
   }
 
@@ -171,8 +188,8 @@ function draw() {
     ctx.fillText("Game Over", canvasWidth / 2 - 120, canvasHeight / 2);
   }
 
-  if (pipePassed && pipeX < birdX) {
-    pipePassed = false;
+  if (obstaclePassed && obstacleX < bossX) {
+    obstaclePassed = false;
   }
 }
 
@@ -180,13 +197,13 @@ function draw() {
 // Classement
 
 
-intervalID = setInterval(draw, 10);
+intervalID = setInterval(draw, difficulty);
 
 
 // Déplacement du personnage
 document.addEventListener("keydown", function (event) {
   if (event.code === "Space" || event.code === "ArrowUp") {
-    birdDY = -3;
+    bossDY = -3;
     sound_jump.play();
   }
 });
@@ -194,30 +211,53 @@ document.addEventListener("keydown", function (event) {
 
 // Fonction Game over et redémarage du jeu
 function gameOver() {
-  console.log(birdY);
-  console.log(pipeHeight);
-  console.log(birdX);
-  console.log(pipeX);
+  console.log(bossY);
+  console.log(obstacleHeight);
+  console.log(bossX);
+  console.log(obstacleX);
   isGameOver = true;
   clearInterval(intervalID);
   document.getElementById("restart-button").style.display = "block";
   sound_background.pause();
-  //sound_die.play();
+  sound_die.play();
+  sound_jump.volume = 0;
+
+  // Enregistrement du joueur et de son score
+  const username = sessionStorage.getItem("username");
+  // Données à ajouter au fichier JSON
+  const newScore = {
+    pseudo: username,
+    score: score,
+  };
+
+  // Envoi d'une requête AJAX POST à l'end point /leaderboard pour ajouter les nouvelles données
+  $.ajax({
+    type: "POST",
+    url: "https://temp3.leod1.site/leaderboard",
+    contentType: "application/json",
+    data: JSON.stringify(newScore),
+    success: function() {
+      console.log("Données ajoutées avec succès !");
+    },
+    error: function() {
+      console.log("Une erreur s'est produite lors de l'ajout des données");
+    }
+  });
 }
 
 function restartGame() {
-  birdX = canvasWidth / 4;
-  birdY = canvasHeight / 2;
-  birdDY = 0;
+  bossX = canvasWidth / 4;
+  bossY = canvasHeight / 2;
+  bossDY = 0;
 
-  pipeX = canvasWidth;
-  pipeGap = 100;
-  pipeDY = -1.5;
-  pipeHeight = canvasHeight - pipeGap - 50;
-  pipePassed = false;
+  obstacleX = canvasWidth;
+  obstacleGap = 100;
+  obstacleDY = -1.5;
+  obstacleHeight = canvasHeight - obstacleGap - 50;
+  obstaclePassed = false;
 
   coinX = canvasWidth;
-  coinY = pipeHeight;
+  coinY = obstacleHeight;
 
   score = 0;
 
@@ -225,7 +265,9 @@ function restartGame() {
 
   document.getElementById("restart-button").style.display = "none";
 
-  intervalID = setInterval(draw, 10);
+  sound_jump.volume = 0.3;
+
+  intervalID = setInterval(draw, difficulty);
 }
 
 
@@ -259,15 +301,15 @@ document.getElementById("start-button").addEventListener("click", function () {
 
 document.getElementById("easy-button").addEventListener("click", function () {
   hideMenu();
-  pipeGap = 200;
-  pipeDY = -1;
+  obstacleGap = 200;
+  obstacleDY = -1;
   startGame();
 });
 
 document.getElementById("hard-button").addEventListener("click", function () {
   hideMenu();
-  pipeGap = 75;
-  pipeDY = -2;
+  obstacleGap = 75;
+  obstacleDY = -2;
   startGame();
 });
 
